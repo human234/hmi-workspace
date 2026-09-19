@@ -43,7 +43,7 @@ manifest:
       remote: human234
       repo-path: simple_ui
       path: modules/hmi
-      revision: main
+      revision: v0.1.0
 
   self:
     path: hmi-workspace
