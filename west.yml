@@ -1,0 +1,49 @@
+# West workspace manifest for the HMI library (github.com/human234/simple_ui).
+#
+# Initializes a Zephyr 4.4 workspace with the `hmi` Zephyr module installed.
+#
+# Bootstrap (from anywhere, Git + Python are only needed for `west init` or
+# run inside the Docker container):
+#
+#   west init -m https://github.com/human234/hmi-workspace hmi-workspace
+#   cd hmi-workspace
+#   west update
+#
+# Then build the bundled demo (needs no host toolchain, only Docker):
+#
+#   # in the hmi-workspace directory:
+#   <path-to-module>/build.ps1                 # Windows (PowerShell)
+#   <path-to-module>/build.cmd                 # Windows (cmd)
+#   make -C modules/hmi build                  # Linux  (or WSL)
+#
+#   <path-to-module>/flash.ps1                 # Windows: flash via USB
+#   make -C modules/hmi flash                  # Linux
+#
+manifest:
+
+  remotes:
+    - name: upstream
+      url-base: https://github.com/zephyrproject-rtos
+    - name: human234
+      url-base: https://github.com/human234
+
+  projects:
+    # Zephyr core: pinned to the latest stable release. `import: true`
+    # pulls its default modules (including LVGL, HALs, etc.) from the
+    # Zephyr v4.4.2 manifest at their matching revisions.
+    - name: zephyr
+      remote: upstream
+      revision: v4.4.2
+      import: true
+
+    # The HMI library; this repository is the `hmi` Zephyr module
+    # (see its zephyr/module.yml), exposed as <hmi/hmi.h>.
+    # Pin `revision` to a tagged release once one is cut (e.g. v0.1.0).
+    - name: simple_ui
+      remote: human234
+      repo-path: simple_ui
+      path: modules/hmi
+      revision: main
+
+  self:
+    path: hmi-workspace
